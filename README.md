@@ -26,7 +26,7 @@ This project focuses on classifying whether a customer applying for an insurance
   - A shallow deep learning model was implemented using **TensorFlow/Keras**.
 - **Evaluation**:
   - Accuracy, classification report, confusion matrix, and cost-based analysis.
-  - **XGBoost** performed the best with **~89% accuracy** on test data.
+  - **XGBoost** performed the best with **~92% accuracy** on test data.
 
 ###  Open-Source AI Models
 - **LLaMA 3.1-8B Instruct** and **OpenChat 3.5-1210** were fine-tuned using LoRA adapters with `trl`'s `SFTTrainer`.
@@ -39,7 +39,7 @@ This project focuses on classifying whether a customer applying for an insurance
 - TensorFlow / Keras
 - Hugging Face Transformers
 - `peft`, `trl`, LoRA
-- Huggingface Hub, Make, joblib
+- Huggingface Hub, joblib
 
 ##  Results
 - **XGBoost** outperformed all models with an accuracy >91%.
