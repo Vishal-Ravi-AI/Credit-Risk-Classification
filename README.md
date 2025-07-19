@@ -1,53 +1,80 @@
+# Credit Risk Classification Using Classical and Open-Source AI Models
 
-#  Credit Risk Classification Using Classical and Open-Source AI Models
+## Files Included
 
-##  Files Included
-- `Classical Models.ipynb` – Contains all steps from preprocessing to evaluation using classical machine learning and deep learning models.
-- `Open_Source_Models.ipynb` – Fine-tunes open-source LLMs (LLaMA 3.1 and OpenChat 3.5) for credit risk classification using LoRA.
-- `credit_alpaca.jsonl` – Dataset formatted for fine-tuning open-source models.
-- `credit_prompts.txt` – Raw structured prompts used for zero-shot LLM classification.
+- `Classical Models.ipynb` – End-to-end pipeline using classical ML and deep learning models.
+- `Open_Source_Models.ipynb` – Fine-tunes open-source LLMs (LLaMA 3.1 and OpenChat 3.5) for credit risk classification.
+- `Cargo_final_timestamp_speed_encoded.xlsx` – Cleaned and preprocessed dataset used for classical model training.
+- `scored_full_dataset.xlsx` – Model-scored output dataset used for evaluation and analysis.
+- `credit_alpaca.jsonl` – Custom dataset formatted for instruction-tuning LLMs.
+- `credit_prompts.txt` – Structured prompts used in zero-shot LLM inference.
+- `xgb_credit_risk_pipeline_final.pkl` – Serialized XGBoost pipeline model for inference.
+- `batch_score.py` – Script to load the serialized model and generate predictions on new data.
 - `README.md` – Project documentation.
-- `*.joblib` – Serialized models for inference.
 
-##  Project Overview
-This project focuses on classifying whether a customer applying for an insurance quote is a **good or bad credit risk** (`1` = good, `0` = bad). It compares classical ML models, deep learning, and fine-tuned LLMs for both performance and deployment feasibility.
+---
 
-##  Workflow Summary
+## Project Overview
 
-###  Classical Models
+This project classifies insurance applicants as either good or bad credit risks (1 = good, 0 = bad). It compares classical machine learning, deep learning, and fine-tuned open-source LLMs to evaluate accuracy, efficiency, and feasibility in production scenarios.
+
+---
+
+## Workflow Summary
+
+### Classical Models
+
 - **Data Cleaning**: Removed missing values, normalized labels.
 - **Feature Engineering**:
-  - Binary mapping (`True`/`False` → 1/0)
+  - Binary mapping (True/False → 1/0)
   - Extracted year, month, weekday from timestamp.
   - Speed binning and one-hot encoding for categorical features.
 - **Model Training**:
-  - Trained multiple models: Logistic Regression, Decision Tree, Random Forest, Naive Bayes, SVM, and XGBoost.
-  - Hyperparameter tuning via GridSearchCV and cross-validation.
-  - A shallow deep learning model was implemented using **TensorFlow/Keras**.
+  - Trained models: Logistic Regression, Decision Tree, Random Forest, Naive Bayes, SVM, XGBoost.
+  - Hyperparameter tuning via `GridSearchCV` and cross-validation.
+  - Shallow deep learning model with TensorFlow/Keras.
 - **Evaluation**:
-  - Accuracy, classification report, confusion matrix, and cost-based analysis.
-  - **XGBoost** performed the best with **~92% accuracy** on test data.
+  - Metrics: Accuracy, classification report, confusion matrix, cost-based analysis.
+  - ✅ **XGBoost** performed best (~92% test accuracy).
+- **Deployment**:
+  - Serialized using `joblib` (saved as `xgb_credit_risk_pipeline_final.pkl`).
+  - Scoring script: `batch_score.py`.
 
-###  Open-Source AI Models
-- **LLaMA 3.1-8B Instruct** and **OpenChat 3.5-1210** were fine-tuned using LoRA adapters with `trl`'s `SFTTrainer`.
-- Used structured prompts (zero-shot) and small custom dataset (`credit_alpaca.jsonl`) for instruction tuning.
-- Final predictions were generated using Hugging Face's `pipeline()` API.
-- Results were compared with classical models to evaluate feasibility.
+### Open-Source AI Models
 
-##  Tools & Libraries
-- scikit-learn (XGBoost, SVM, RF, LR, etc.)
-- TensorFlow / Keras
-- Hugging Face Transformers
-- `peft`, `trl`, LoRA
-- Huggingface Hub, joblib
+- **LLMs**: LLaMA 3.1–8B Instruct and OpenChat 3.5–1210.
+- **Fine-tuning**:
+  - LoRA adapters using `trl.SFTTrainer` with `credit_alpaca.jsonl`.
+- **Zero-shot Inference**:
+  - Prompt-based classification using `credit_prompts.txt`.
+  - Hugging Face `pipeline()` for generation.
+- **Evaluation**:
+  - Compared LLMs to classical models in accuracy and runtime.
 
-##  Results
-- **XGBoost** outperformed all models with an accuracy >91%.
-- Classical models were significantly faster and easier to interpret.
-- Open-source LLMs demonstrated flexibility for inference but required heavy compute and longer response times.
-- LoRA tuning was effective in adapting general-purpose LLMs for structured data classification.
+---
 
-##  Notes
-- PyTorch was **not used** in this implementation.
-- Mistral was **not included** in the final version.
-- All code is designed for readability and reproducibility.
+## Tools & Libraries
+
+- `scikit-learn`, `XGBoost`, `SVM`, `LogisticRegression`
+- `TensorFlow` / `Keras`
+- `transformers`, `trl`, `peft` (LoRA)
+- `joblib` (model serialization)
+- `pandas`, `openpyxl`, `Hugging Face Hub`
+
+---
+
+## Results
+
+- **XGBoost** achieved ~92% accuracy and best overall performance.
+- Classical models were fast, interpretable, and production-friendly.
+- Fine-tuned LLMs were flexible but required higher compute and longer inference time.
+
+---
+
+## Notes
+
+- `.pkl` file (`xgb_credit_risk_pipeline_final.pkl`) stores the serialized pipeline model.
+- Prompt tuning was done using a small JSONL dataset, not full tabular data.
+- Mistral was not included in the final version.
+- All notebooks are designed for reproducibility and learning.
+
